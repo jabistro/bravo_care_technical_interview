@@ -30,7 +30,15 @@
   font-weight: 500;
 }
 
-.info_return > button {
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit_btn {
+  margin-top: 15px;
   width: 250px;
   height: 40px;
   background-color: transparent;
@@ -41,9 +49,28 @@
   cursor: pointer;
 }
 
-.info_return > button:hover {
+.submit_btn:disabled:hover {
+  background-color: gray;
+  color: lightgray;
+}
+
+.submit_btn:hover {
+  background-color: #6fa8dc;
+  color: black;
+}
+
+.reset_btn {
+  background-color: lightgray;
+  color: black;
+  border: 2px solid black;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.reset_btn:hover {
   background-color: black;
-  color: white;
+  color: lightgray;
 }
 
 .shifts_grid {
@@ -51,30 +78,4 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 36px;
-}
-
-.shift_wrap {
-  border: 3px solid black;
-  height: 150px;
-  width: 272px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-}
-
-.shift_wrap:hover {
-  background-color: #6fa8dc;
-  cursor: pointer;
-}
-
-.shift_wrap > p {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  font-weight: 500;
-}
-
-.shift_times {
-  display: flex;
 }

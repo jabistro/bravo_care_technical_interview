@@ -1,25 +1,42 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DateFormat from "./components/DateFormat/DateFormat";
-import StartTime from "./components/ShiftTimes/StartTime/StartTime";
-import EndTime from "./components/ShiftTimes/EndTime/EndTime";
+import Shift from "./components/Shift/Shift";
 
 function App() {
-  const [shifts, setShifts] = useState([]);
+  const [allShifts, setAllShifts] = useState([]);
+  const [selectedShifts, setSelectedShifts] = useState({});
   const [overlapMins, setOverlapMins] = useState("N/A");
   const [maxOverlapThreshold, setMaxOverlapThreshold] = useState("N/A");
   const [doesExceed, setDoesExceed] = useState("N/A");
-  const [selected, setSelected] = useState(false);
-  const selectedShifts = new Set();
 
   useEffect(() => {
-    const getShifts = async () => {
+    const getAllShifts = async () => {
       const res = await axios.get("http://localhost:3001/");
-      setShifts(res.data);
+      setAllShifts(res.data);
     };
-    getShifts();
+    getAllShifts();
   }, []);
+
+  console.log(selectedShifts);
+
+  const handleSubmit = () => {
+    const selectedShiftsArr = Object.values(selectedShifts);
+    console.log(selectedShiftsArr);
+    if (
+      selectedShiftsArr[0].facility_name !== selectedShiftsArr[1].facility_name
+    ) {
+      setOverlapMins(0);
+      setMaxOverlapThreshold(0);
+      setDoesExceed("False");
+    }
+  };
+
+  const handleReset = () => {
+    setOverlapMins("N/A");
+    setMaxOverlapThreshold("N/A");
+    setDoesExceed("N/A");
+  };
 
   return (
     <div className="wrap">
@@ -29,19 +46,28 @@ function App() {
           <p>Max Overlap Threshold: {maxOverlapThreshold}</p>
           <p>Exceeds Overlap Threshold: {doesExceed}</p>
         </div>
-        <button>Submit</button>
+        <div className="buttons">
+          <button
+            className="submit_btn"
+            onClick={handleSubmit}
+            disabled={Object.keys(selectedShifts).length !== 2}
+          >
+            Submit
+          </button>
+          <button onClick={handleReset} className="reset_btn">
+            Reset
+          </button>
+        </div>
       </div>
       <div className="shifts_grid">
-        {shifts.map((shift, idx) => {
+        {allShifts.map((shift, idx) => {
           return (
-            <div key={idx} className="shift_wrap">
-              <p>{shift.facility_name}</p>
-              <DateFormat shift_date={shift.shift_date} />
-              <div className="shift_times">
-                <StartTime start_time={shift.start_time} />
-                &nbsp;-&nbsp;
-                <EndTime end_time={shift.end_time} />
-              </div>
+            <div key={idx}>
+              <Shift
+                selectedShifts={selectedShifts}
+                setSelectedShifts={setSelectedShifts}
+                shift={shift}
+              />
             </div>
           );
         })}
