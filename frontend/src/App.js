@@ -21,22 +21,128 @@ function App() {
   console.log(selectedShifts);
 
   const handleSubmit = () => {
-    const selectedShiftsArr = Object.values(selectedShifts);
+    const dateSort = (a, b) => {
+      if (a.shift_date < b.shift_date) {
+        return -1;
+      } else if (a.shift_date > b.shift_date) {
+        return 1;
+      } else {
+        if (a.start_time < b.start_time) {
+          return -1;
+        } else if (a.start_time > b.start_time) {
+          return 1;
+        }
+        return 0;
+      }
+    };
+
+    const selectedShiftsArr = Object.values(selectedShifts).sort(dateSort);
     console.log(selectedShiftsArr);
+
     if (
-      selectedShiftsArr[0].facility_name !== selectedShiftsArr[1].facility_name
+      selectedShiftsArr[0].facility_name ===
+        selectedShiftsArr[1].facility_name &&
+      selectedShiftsArr[0].shift_date === selectedShiftsArr[1].shift_date
     ) {
-      setOverlapMins(0);
+      const endTimeArr1 = selectedShiftsArr[0].end_time.split(":");
+      const endHoursToMins1 = parseInt(endTimeArr1[0]) * 60;
+      const endTimeInMins1 = endHoursToMins1 + parseInt(endTimeArr1[1]);
+
+      const startTimeArr2 = selectedShiftsArr[1].start_time.split(":");
+      const startHoursToMins2 = parseInt(startTimeArr2[0]) * 60;
+      const startTimeInMins2 = startHoursToMins2 + parseInt(startTimeArr2[1]);
+
+      setOverlapMins(
+        endTimeInMins1 > startTimeInMins2
+          ? endTimeInMins1 - startTimeInMins2
+          : 0
+      );
+      setMaxOverlapThreshold(30);
+      setDoesExceed(endTimeInMins1 - startTimeInMins2 > 30 ? "True" : "False");
+    } else if (
+      selectedShiftsArr[0].facility_name !==
+        selectedShiftsArr[1].facility_name &&
+      selectedShiftsArr[0].shift_date === selectedShiftsArr[1].shift_date
+    ) {
+      const endTimeArr1 = selectedShiftsArr[0].end_time.split(":");
+      const endHoursToMins1 = parseInt(endTimeArr1[0]) * 60;
+      const endTimeInMins1 = endHoursToMins1 + parseInt(endTimeArr1[1]);
+
+      const startTimeArr2 = selectedShiftsArr[1].start_time.split(":");
+      const startHoursToMins2 = parseInt(startTimeArr2[0]) * 60;
+      const startTimeInMins2 = startHoursToMins2 + parseInt(startTimeArr2[1]);
+
+      setOverlapMins(
+        endTimeInMins1 > startTimeInMins2
+          ? endTimeInMins1 - startTimeInMins2
+          : 0
+      );
       setMaxOverlapThreshold(0);
-      setDoesExceed("False");
+      setDoesExceed(endTimeInMins1 - startTimeInMins2 > 0 ? "True" : "False");
+    } else {
+      if (
+        parseInt(selectedShiftsArr[0].start_time.split(":")[0]) > 11 &&
+        parseInt(selectedShiftsArr[0].end_time.split(":")[0]) < 12
+      ) {
+        const firstDate = selectedShiftsArr[0].shift_date.split("T");
+        firstDate.pop();
+        const firstDateArr = firstDate[0].split("-");
+
+        const secondDate = selectedShiftsArr[1].shift_date.split("T");
+        secondDate.pop();
+        const secondDateArr = secondDate[0].split("-");
+
+        if (
+          firstDateArr[0] !== secondDateArr[0] ||
+          firstDateArr[1] !== secondDateArr[1]
+        ) {
+          setOverlapMins(0);
+          setMaxOverlapThreshold(0);
+          setDoesExceed("False");
+        } else {
+          if (parseInt(firstDateArr[2]) + 1 === parseInt(secondDateArr[2])) {
+            const endTimeArr1 = selectedShiftsArr[0].end_time.split(":");
+            const endHoursToMins1 = parseInt(endTimeArr1[0]) * 60;
+            const endTimeInMins1 = endHoursToMins1 + parseInt(endTimeArr1[1]);
+
+            const startTimeArr2 = selectedShiftsArr[1].start_time.split(":");
+            const startHoursToMins2 = parseInt(startTimeArr2[0]) * 60;
+            const startTimeInMins2 =
+              startHoursToMins2 + parseInt(startTimeArr2[1]);
+
+            setOverlapMins(
+              endTimeInMins1 > startTimeInMins2
+                ? endTimeInMins1 - startTimeInMins2
+                : 0
+            );
+            setMaxOverlapThreshold(0);
+            setDoesExceed(
+              endTimeInMins1 - startTimeInMins2 > 0 ? "True" : "False"
+            );
+          }
+        }
+      } else {
+        setOverlapMins(0);
+        setMaxOverlapThreshold(0);
+        setDoesExceed("False");
+      }
     }
   };
 
-  const handleReset = () => {
-    setOverlapMins("N/A");
-    setMaxOverlapThreshold("N/A");
-    setDoesExceed("N/A");
-  };
+  // const handleReset = () => {
+  //   setOverlapMins("N/A");
+  //   setMaxOverlapThreshold("N/A");
+  //   setDoesExceed("N/A");
+  //   setSelectedShifts({});
+
+  //   const selectedDivs = document.getElementsByClassName("shift_wrap_clicked");
+
+  //   for (let i = 0; i < selectedDivs.length; i++) {
+  //     let div = selectedDivs[i];
+
+  //     div.className = "shift_wrap_unclicked";
+  //   }
+  // };
 
   return (
     <div className="wrap">
@@ -54,9 +160,9 @@ function App() {
           >
             Submit
           </button>
-          <button onClick={handleReset} className="reset_btn">
+          {/* <button onClick={handleReset} className="reset_btn">
             Reset
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="shifts_grid">
