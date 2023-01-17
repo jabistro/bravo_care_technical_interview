@@ -49,8 +49,13 @@
   cursor: pointer;
 }
 
+.submit_btn:disabled {
+  background-color: white;
+  color: lightgray;
+}
+
 .submit_btn:disabled:hover {
-  background-color: gray;
+  background-color: white;
   color: lightgray;
 }
 

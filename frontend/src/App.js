@@ -18,8 +18,6 @@ function App() {
     getAllShifts();
   }, []);
 
-  console.log(selectedShifts);
-
   const handleSubmit = () => {
     const dateSort = (a, b) => {
       if (a.shift_date < b.shift_date) {
@@ -37,7 +35,6 @@ function App() {
     };
 
     const selectedShiftsArr = Object.values(selectedShifts).sort(dateSort);
-    console.log(selectedShiftsArr);
 
     if (
       selectedShiftsArr[0].facility_name ===
