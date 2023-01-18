@@ -5,7 +5,7 @@ import moment from "moment";
 
 const DateFormat = ({ shift_date }) => {
   const date = new Date(shift_date);
-  const dateStr = date.toDateString();
+  const dateStr = date.toISOString();
   const momento = moment(dateStr).format("YYYY-MM-DD");
 
   return <p className="date_txt">{momento}</p>;

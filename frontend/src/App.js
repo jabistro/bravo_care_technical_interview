@@ -9,6 +9,9 @@ function App() {
   const [overlapMins, setOverlapMins] = useState("N/A");
   const [maxOverlapThreshold, setMaxOverlapThreshold] = useState("N/A");
   const [doesExceed, setDoesExceed] = useState("N/A");
+  const [queryFour, setQueryFour] = useState([]);
+  const [queryFive, setQueryFive] = useState([]);
+  const [querySix, setQuerySix] = useState([]);
 
   useEffect(() => {
     const getAllShifts = async () => {
@@ -16,6 +19,18 @@ function App() {
       setAllShifts(res.data);
     };
     getAllShifts();
+
+    const getQueryFour = async () => {
+      const res = await axios.get("http://localhost:3001/q4");
+      setQueryFour(res.data);
+    };
+    getQueryFour();
+
+    const getQueryFive = async () => {
+      const res = await axios.get("http://localhost:3001/q5");
+      setQueryFive(res.data);
+    };
+    getQueryFive();
   }, []);
 
   const handleSubmit = () => {
@@ -174,6 +189,15 @@ function App() {
             </div>
           );
         })}
+      </div>
+      <div className="query_btns">
+        <button onClick={() => console.table(queryFour)}>
+          Execute Q4 Query
+        </button>
+        <button onClick={() => console.table(queryFive)}>
+          Execute Q5 Query
+        </button>
+        <button>Execute Q6 Query</button>
       </div>
     </div>
   );
