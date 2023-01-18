@@ -44,6 +44,13 @@ app.get("/q5", async (req, res) => {
   res.send(rows);
 });
 
+app.get("/q6", async (req, res) => {
+  const { rows } = await client.query(
+    "SELECT DISTINCT nurse_name AS co_workers FROM jobs j INNER JOIN nurse_hired_jobs nhj ON j.job_id = nhj.job_id INNER JOIN nurses n ON n.nurse_id = nhj.nurse_id INNER JOIN (SELECT j.facility_id FROM nurses n INNER JOIN nurse_hired_jobs nhj ON n.nurse_id = nhj.nurse_id INNER JOIN jobs j ON j.job_id = nhj.job_id WHERE n.nurse_name = 'Anne') x ON x.facility_Id = j.facility_id WHERE n.nurse_id NOT IN (SELECT nurse_id FROM nurses WHERE nurse_name = 'Anne')"
+  );
+  res.send(rows);
+});
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });

@@ -6,9 +6,9 @@ import Shift from "./components/Shift/Shift";
 function App() {
   const [allShifts, setAllShifts] = useState([]);
   const [selectedShifts, setSelectedShifts] = useState({});
-  const [overlapMins, setOverlapMins] = useState("N/A");
-  const [maxOverlapThreshold, setMaxOverlapThreshold] = useState("N/A");
-  const [doesExceed, setDoesExceed] = useState("N/A");
+  const [overlapMins, setOverlapMins] = useState("");
+  const [maxOverlapThreshold, setMaxOverlapThreshold] = useState("");
+  const [doesExceed, setDoesExceed] = useState("");
   const [queryFour, setQueryFour] = useState([]);
   const [queryFive, setQueryFive] = useState([]);
   const [querySix, setQuerySix] = useState([]);
@@ -31,6 +31,12 @@ function App() {
       setQueryFive(res.data);
     };
     getQueryFive();
+
+    const getQuerySix = async () => {
+      const res = await axios.get("http://localhost:3001/q6");
+      setQuerySix(res.data);
+    };
+    getQuerySix();
   }, []);
 
   const handleSubmit = () => {
@@ -148,12 +154,8 @@ function App() {
   //   setSelectedShifts({});
 
   //   const selectedDivs = document.getElementsByClassName("shift_wrap_clicked");
-
-  //   for (let i = 0; i < selectedDivs.length; i++) {
-  //     let div = selectedDivs[i];
-
-  //     div.className = "shift_wrap_unclicked";
-  //   }
+  //   selectedDivs[0].className = "shift_wrap_unclicked";
+  //   selectedDivs[1].className = "shift_wrap_unclicked";
   // };
 
   return (
@@ -197,7 +199,7 @@ function App() {
         <button onClick={() => console.table(queryFive)}>
           Execute Q5 Query
         </button>
-        <button>Execute Q6 Query</button>
+        <button onClick={() => console.table(querySix)}>Execute Q6 Query</button>
       </div>
     </div>
   );
