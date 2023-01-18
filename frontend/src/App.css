@@ -11,7 +11,7 @@
 .info_return {
   margin-top: 20px;
   width: 900px;
-  height: 110px;
+  height: 130px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,7 +38,7 @@
 }
 
 .submit_btn {
-  margin-top: 15px;
+  margin-top: 10px;
   width: 250px;
   height: 40px;
   background-color: transparent;
@@ -65,17 +65,20 @@
 }
 
 .reset_btn {
-  background-color: lightgray;
-  color: black;
-  border: 2px solid black;
-  cursor: pointer;
   margin-top: 10px;
+  width: 150px;
+  height: 40px;
+  background-color: transparent;
+  border: 3px solid black;
+  margin-right: 10px;
   font-weight: bold;
+  box-shadow: 3px 3px black;
+  cursor: pointer;
 }
 
 .reset_btn:hover {
   background-color: black;
-  color: lightgray;
+  color: white;
 }
 
 .shifts_grid {

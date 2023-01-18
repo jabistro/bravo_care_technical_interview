@@ -199,7 +199,9 @@ function App() {
         <button onClick={() => console.table(queryFive)}>
           Execute Q5 Query
         </button>
-        <button onClick={() => console.table(querySix)}>Execute Q6 Query</button>
+        <button onClick={() => console.table(querySix)}>
+          Execute Q6 Query
+        </button>
       </div>
     </div>
   );
